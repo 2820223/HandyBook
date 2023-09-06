@@ -1,21 +1,29 @@
 package itschool.uz
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RegisterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+private lateinit var name:EditText
+private lateinit var surname:EditText
+private lateinit var email:EditText
+private lateinit var password:EditText
+private lateinit var registerBtn:EditText
+private lateinit var passwordcheck:EditText
+private lateinit var db: DBHelper
+
 class RegisterFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -23,17 +31,67 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        name.findViewById<EditText>(R.id.name)
+        surname.findViewById<EditText>(R.id.surname)
+        email.findViewById<EditText>(R.id.email_reg_edittext)
+        password.findViewById<EditText>(R.id.parol_reg_edittext)
+        passwordcheck.findViewById<EditText>(R.id.parol_check_reg_edittext)
+        registerBtn.findViewById<Button>(R.id.royhatdan_otish_btn)
+        db = DBHelper(this)
+
+        registerBtn.setOnClickListener{
+            val nametext = name.text.toString()
+            val surnametext = surname.text.toString()
+            val emailtext = email.text.toString()
+            val passwordtext = password.text.toString()
+            val passwordchecktext = passwordcheck.text.toString()
+            val savedata = db.insertdata(emailtext,passwordtext)
+
+
+
+            if (TextUtils.isEmpty(nametext) || (TextUtils.isEmpty(surnametext) || (TextUtils.isEmpty(emailtext) || (TextUtils.isEmpty(passwordchecktext) ||  (TextUtils.isEmpty(passwordtext))
+                {
+                Toast.makeText(requireActivity(), " Add name, surname, password, email and confirm password", Toast.LENGTH_SHORT).show()
+                }
+
+            else{
+                if (passwordtext.equals(passwordchecktext)) {
+                    if (savedata == true) {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Registered succesfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val intent = Intent(context, LoginFragment::class.java)
+                        startActivity(intent)
+
+                    } else {
+                        Toast.makeText(requireActivity(), "User exists", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                else{
+                    Toast.makeText(requireActivity(), "Passwords don't match", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+
+
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
