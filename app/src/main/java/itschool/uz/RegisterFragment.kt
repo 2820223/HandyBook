@@ -43,7 +43,7 @@ class RegisterFragment : Fragment() {
         password.findViewById<EditText>(R.id.parol_reg_edittext)
         passwordcheck.findViewById<EditText>(R.id.parol_check_reg_edittext)
         registerBtn.findViewById<Button>(R.id.royhatdan_otish_btn)
-        db = DBHelper(this)
+        db = DBHelper(this.requireActivity())
 
         registerBtn.setOnClickListener{
             val nametext = name.text.toString()
@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
 
 
 
-            if (TextUtils.isEmpty(nametext) || (TextUtils.isEmpty(surnametext) || (TextUtils.isEmpty(emailtext) || (TextUtils.isEmpty(passwordchecktext) ||  (TextUtils.isEmpty(passwordtext))
+            if ((TextUtils.isEmpty(nametext) ) ||  TextUtils.isEmpty(surnametext) || (TextUtils.isEmpty(emailtext)) || (TextUtils.isEmpty(passwordchecktext) ) ||  (TextUtils.isEmpty(passwordtext)) )
                 {
                 Toast.makeText(requireActivity(), " Add name, surname, password, email and confirm password", Toast.LENGTH_SHORT).show()
                 }

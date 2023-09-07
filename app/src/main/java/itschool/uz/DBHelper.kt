@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DBHelper(context: RegisterFragment):SQLiteOpenHelper(context, "Userdata", null, 1) {
+class DBHelper(context: LoginFragment):SQLiteOpenHelper(context.requireActivity(), "Userdata", null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
  db?.execSQL("create table Userdata (email TEXT primary key, password TEXT primary key) ")
     }
@@ -19,13 +19,13 @@ fun insertdata(email : String, password : String): Boolean{
     cv.put("email", email)
     cv.put("password", password)
     val result = db.insert("Userdata", null, cv)
-    if(result==-1 .toLong()){
+    if(result== -1  .toLong()){
         return false
     }
     return true
 }
     @SuppressLint("SuspiciousIndentation")
-    fun chechuserpass(email: String, password: String): Boolean{
+    fun checkuserpass(email: String, password: String): Boolean{
         val db = this.writableDatabase
         val query = "select * from Userdata where email= '$email' and password= '$password'"
         val cursor = db.rawQuery(query, null)
